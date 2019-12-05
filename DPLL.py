@@ -14,13 +14,12 @@ def DPPL_rec(clauses, interpretation):
     if clauses == []:
         return interpretation
     literal = get_literal(clauses)
-    print(literal)
     clauses1 = clauses + [{literal}]
     clauses2 = clauses + [{-1*literal}]
-    answer = DPPL_rec(clauses1, interpretation)
+    answer = DPPL_rec(clauses1, interpretation.copy())
     if answer != False:
         return answer
-    return DPPL_rec(clauses2, interpretation)
+    return DPPL_rec(clauses2, interpretation.copy())
 
 
 def get_literal(clauses):
@@ -36,7 +35,7 @@ def get_literal(clauses):
     for j in indexs[1:]:
         if literals.intersection(clauses[j]) != set():
             literals = literals.intersection(clauses[j])
-    return literals.pop()
+    return list(literals)[0]
 
 def unit_propagation(clauses, interpretation):
     for i in range(len(clauses)):
