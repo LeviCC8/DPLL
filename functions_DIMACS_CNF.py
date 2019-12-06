@@ -9,12 +9,12 @@ def read_DIMACS_CNF(file):
         for y in x[:-1]:
             C.add(int(y))
         B += [C]
-    numberAtomics = int(lines[1].split()[2])
-    return B, numberAtomics
+    atomicsNumber = int(lines[1].split()[2])
+    return B, atomicsNumber
 
-def write_solution(answer, numberAtomics):
+def write_solution(answer, atomicsNumber):
     file = open('answer.txt', 'w')
-    atomics = list(range(1, numberAtomics+1))
+    atomics = list(range(1, atomicsNumber+1))
     if answer == False:
         file.write('UNSATISFIABLE')
     else:
