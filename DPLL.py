@@ -24,7 +24,7 @@ def DPPL_rec(clauses, interpretation):
 
 def get_literal(clauses):
     indexs = []
-    minLength = 2**1024
+    minLength = 2**1024 ###################### mudar ##########################
     for i in range(len(clauses)):
         if len(clauses[i]) < minLength:
             indexs = [i]

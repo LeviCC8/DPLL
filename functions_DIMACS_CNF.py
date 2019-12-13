@@ -12,6 +12,9 @@ def read_DIMACS_CNF(file):
     atomicsNumber = int(lines[1].split()[2])
     return B, atomicsNumber
 
+def write_DIMACS_CNF():
+    pass
+
 def write_solution(answer, atomicsNumber):
     file = open('answer.txt', 'w')
     atomics = list(range(1, atomicsNumber+1))
