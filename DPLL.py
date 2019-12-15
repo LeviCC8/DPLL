@@ -2,6 +2,7 @@
 # Example of A (DIMACS CNF): [{1, -3}, {2, 3, -1}, {1}] (list of clauses, that is set of literals)
 
 from functions_DIMACS_CNF import read_DIMACS_CNF, write_solution
+from functools import reduce
 
 def DPPL(clauses):
     return DPPL_rec(clauses, set())
@@ -23,19 +24,12 @@ def DPPL_rec(clauses, interpretation):
 
 
 def get_literal(clauses):
-    indexs = []
-    minLength = 2**1024 ###################### mudar ##########################
-    for i in range(len(clauses)):
-        if len(clauses[i]) < minLength:
-            indexs = [i]
-            minLength = len(clauses[i])
-        elif len(clauses[i]) == minLength:
-            indexs += [i]
-    literals = clauses[indexs[0]]
-    for j in indexs[1:]:
-        if literals.intersection(clauses[j]) != set():
-            literals = literals.intersection(clauses[j])
-    return list(literals)[0]
+    # heuristic: branch on a literal whose atom occurs most often in a clause of shortest length
+    minLength = len(reduce(lambda x, y: x if len(x) < len(y) else y, clauses))
+    indexes = list(filter(lambda x: len(clauses[x]) == minLength, range(len(clauses))))
+    literals = reduce(lambda x, y: x.union(y) , clauses)
+    literal = reduce(lambda a, b: a if sum([1 if a in clauses[x] else 0 for x in indexes]) > sum([1 if b in clauses[x] else 0 for x in indexes]) else b, literals)
+    return literal
 
 def unit_propagation(clauses, interpretation):
     for i in range(len(clauses)):
