@@ -4,8 +4,10 @@
 from functions_DIMACS_CNF import read_DIMACS_CNF, write_solution
 from functools import reduce
 
+
 def DPPL(clauses):
     return DPPL_rec(clauses, set())
+
 
 def DPPL_rec(clauses, interpretation):
     clauses, interpretation2 = unit_propagation(clauses, set())
@@ -16,7 +18,7 @@ def DPPL_rec(clauses, interpretation):
         return interpretation
     literal = get_literal(clauses)
     clauses1 = clauses + [{literal}]
-    clauses2 = clauses + [{-1*literal}]
+    clauses2 = clauses + [{-1 * literal}]
     answer = DPPL_rec(clauses1, interpretation.copy())
     if answer != False:
         return answer
@@ -24,26 +26,29 @@ def DPPL_rec(clauses, interpretation):
 
 
 def get_literal(clauses):
-    # heuristic: branch on a literal whose atom occurs most often in a clause of shortest length
-    minLength = len(reduce(lambda x, y: x if len(x) < len(y) else y, clauses))
-    indexes = list(filter(lambda x: len(clauses[x]) == minLength, range(len(clauses))))
-    literals = reduce(lambda x, y: x.union(y) , clauses)
+    # Heuristic: branch on a literal whose atom occurs most often in a clause of shortest length
+    min_length = len(reduce(lambda x, y: x if len(x) < len(y) else y, clauses))
+    indexes = list(filter(lambda x: len(clauses[x]) == min_length, range(len(clauses))))
+    literals = reduce(lambda x, y: x.union(y), clauses)
     literal = reduce(lambda a, b: a if sum([1 if a in clauses[x] else 0 for x in indexes]) > sum([1 if b in clauses[x] else 0 for x in indexes]) else b, literals)
     return literal
+
 
 def unit_propagation(clauses, interpretation):
     for i in range(len(clauses)):
         if len(clauses[i]) == 1:
-            unitLiteral = list(clauses[i])[0]
-            interpretation = interpretation.union({(unitLiteral, False)}) if unitLiteral < 0 else interpretation.union({(unitLiteral, True)})
+            unit_literal = list(clauses[i])[0]
+            interpretation = interpretation.union(
+                {(unit_literal, False)}) if unit_literal < 0 else interpretation.union({(unit_literal, True)})
             A = []
             for clause in clauses:
-                if unitLiteral not in clause:
-                    clause.discard(-1*unitLiteral)
+                if unit_literal not in clause:
+                    clause.discard(-1 * unit_literal)
                     A += [clause]
             return unit_propagation(A, interpretation)
     return clauses, interpretation
 
-A, numberAtomics = read_DIMACS_CNF('example.txt')
+
+A, atomics_number = read_DIMACS_CNF('example.txt')
 answer = DPPL(A)
-write_solution(answer, numberAtomics)
+write_solution(answer, atomics_number)
