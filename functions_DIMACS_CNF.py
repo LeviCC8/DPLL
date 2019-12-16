@@ -13,27 +13,43 @@ def read_DIMACS_CNF(file):
     return B, atomics_number
 
 
-def write_DIMACS_CNF(literals_number, rules, comment):
-    file = open('DIMASC_CNF.txt', 'w')
+def write_DIMACS_CNF(literals_number, clauses, comment, file_name):
+    file = open(f'{file_name}.txt', 'w')
     file.write(f'c {comment}\n')
-    file.write(f'p cnf {literals_number} {len(rules)}\n')
-    for rule in rules:
-        for literal in rule:
+    file.write(f'p cnf {literals_number} {len(clauses)}\n')
+    for clause in clauses:
+        for literal in clause:
             file.write(f'{literal} ')
         file.write('0\n')
     file.close()
 
 
-def write_solution(answer, atomics_number):
-    file = open('answer.txt', 'w')
-    atomics = list(range(1, atomics_number + 1))
+def append_clauses(file_name, clauses, new_comment, new_file_name):
+    file = open(file_name, 'r')
+    lines = file.readlines()
+    file.close()
+    lines[0] = f'c {new_comment}\n'
+    literals_number = lines[1].split()[-2]
+    old_clauses_number = int(lines[1].split()[-1])
+    new_clauses_number = old_clauses_number + len(clauses)
+    lines[1] = f'p cnf {literals_number} {new_clauses_number}\n'
+    for clause in clauses:
+        line = ''
+        for literal in clause:
+            line += f'{literal} '
+        line += '0\n'
+        lines += [line]
+    new_file = open(new_file_name, 'w')
+    new_file.writelines(lines)
+    new_file.close()
+
+
+def write_solution(answer, file_name):
+    file = open(file_name, 'w')
     if answer is False:
         file.write('UNSATISFIABLE')
     else:
         for i in answer:
-            atomics.remove(abs(i[0]))
             file.write(str(i[0]) + ' ') if i[1] is True else file.write(str(-1 * i[0]) + ' ')
-        for j in atomics:
-            file.write(str(j) + ' ')
         file.write('0')
     file.close()

@@ -1,7 +1,6 @@
 # A is in clausal form
 # Example of A (DIMACS CNF): [{1, -3}, {2, 3, -1}, {1}] (list of clauses, that is set of literals)
 
-from functions_DIMACS_CNF import read_DIMACS_CNF, write_solution
 from functools import reduce
 
 
@@ -47,8 +46,3 @@ def unit_propagation(clauses, interpretation):
                     A += [clause]
             return unit_propagation(A, interpretation)
     return clauses, interpretation
-
-
-A, atomics_number = read_DIMACS_CNF('example.txt')
-answer = DPPL(A)
-write_solution(answer, atomics_number)
