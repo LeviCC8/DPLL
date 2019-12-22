@@ -43,12 +43,16 @@ def append_clauses(file_name, clauses, new_comment, new_file_name):
     new_file.close()
 
 
-def write_solution(answer, file_name):
+def write_solution(answer, file_name, my_method):
     file = open(file_name, 'w')
     if answer is False:
         file.write('UNSATISFIABLE')
     else:
-        for i in answer:
-            file.write(str(i[0]) + ' ') if i[1] is True else file.write(str(-1 * i[0]) + ' ')
+        if my_method:
+            for i in answer:
+                file.write(str(i[0]) + ' ') if i[1] is True else file.write(str(-1 * i[0]) + ' ')
+        else:
+            for i in answer:
+                file.write(str(i) + ' ')
         file.write('0')
     file.close()
