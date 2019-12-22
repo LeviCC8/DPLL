@@ -13,7 +13,7 @@ def fill_tests(model_name, input):
 def accuracy(output):
     test_predict = []
     for i in range(1, 156):
-        A, atomics_number = read_DIMACS_CNF(f'tests/test_{i}.txt')
+        A = read_DIMACS_CNF(f'tests/test_{i}.txt')
         answer = DPPL(A)
         write_solution(answer, f'tests/test_{i}_solution.txt')
         test_predict += [0] if answer is False else [1]

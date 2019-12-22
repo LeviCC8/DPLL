@@ -9,8 +9,7 @@ def read_DIMACS_CNF(file_name):
         for y in x[:-1]:
             C.add(int(y))
         B += [C]
-    atomics_number = int(lines[1].split()[2])
-    return B, atomics_number
+    return B
 
 
 def write_DIMACS_CNF(literals_number, clauses, comment, file_name):
