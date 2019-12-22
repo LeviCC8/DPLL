@@ -1,5 +1,5 @@
-def read_DIMACS_CNF(file):
-    DIMACS_CNF = open(file, 'r')
+def read_DIMACS_CNF(file_name):
+    DIMACS_CNF = open(file_name, 'r')
     lines = DIMACS_CNF.readlines()
     DIMACS_CNF.close()
     A = [x.split() for x in lines[2:]]
@@ -14,7 +14,7 @@ def read_DIMACS_CNF(file):
 
 
 def write_DIMACS_CNF(literals_number, clauses, comment, file_name):
-    file = open(f'{file_name}.txt', 'w')
+    file = open(file_name, 'w')
     file.write(f'c {comment}\n')
     file.write(f'p cnf {literals_number} {len(clauses)}\n')
     for clause in clauses:
